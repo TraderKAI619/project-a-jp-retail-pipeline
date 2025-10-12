@@ -1,5 +1,12 @@
 # SOURCES – Official references (to be filled in Step 4/8)
 
+| Dataset | File name | Source (org/page) | Retrieved at (JST) | Size (bytes) | SHA256 | Notes |
+|--------|-----------|-------------------|--------------------|--------------|--------|-------|
+| holidays |  |  |  |  |  |  |
+| jis      |  |  |  |  |  |  |
+| tax      |  |  |  |  |  |  |
+
+
 ## Holidays / Calendar
 - [ ] Source 1 (gov)
 - [ ] Source 2 (gov/official)
