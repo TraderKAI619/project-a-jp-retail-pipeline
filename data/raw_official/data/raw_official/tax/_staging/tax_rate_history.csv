@@ -1,6 +1,0 @@
-start_date,end_date,rate_type,total_rate,consumption_tax_rate,local_consumption_tax_rate,notes,source_url
-1989-04-01,1997-03-31,standard,0.03,0.03,0.00,"消費税導入（3%）","https://apps.fas.usda.gov/newgainapi/api/Report/DownloadReportByFileName?fileName=Japanese+Consumption+Tax+Increased+to+10+Percent_Tokyo_Japan_09-28-2019"
-1997-04-01,2014-03-31,standard,0.05,0.04,0.01,"5%（地方消費税1%創設）","https://www.nta.go.jp/about/introduction/torikumi/report/2003/japanese/text/02/04_6.htm"
-2014-04-01,2019-09-30,standard,0.08,0.063,0.017,"8%（国6.3%＋地方1.7%）","https://www.nta.go.jp/taxes/shiraberu/taxanswer/shohi/6303.htm"
-2019-10-01,,standard,0.10,0.078,0.022,"現行標準税率10%","https://www.nta.go.jp/taxes/shiraberu/taxanswer/shohi/6303.htm"
-2019-10-01,,reduced,0.08,0.0624,0.0176,"軽減税率8%（飲食料品等・新聞）","https://www.nta.go.jp/taxes/shiraberu/zeimokubetsu/shohi/keigenzeiritsu/pdf/01.pdf"
