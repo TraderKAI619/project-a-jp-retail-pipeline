@@ -1,0 +1,5 @@
+start_date,end_date,tax_rate,reduced_tax_rate,source,source_version,notes
+1989-04-01,1997-03-31,3,,https://www.mof.go.jp/tax_policy/summary/consumption_tax/index.html,2025-10-13,消費税導入（3%）
+1997-04-01,2014-03-31,5,,https://www.mof.go.jp/tax_policy/summary/consumption_tax/index.html,2025-10-13,税率引上げ（5%）
+2014-04-01,2019-09-30,8,,https://www.mof.go.jp/tax_policy/summary/consumption_tax/index.html,2025-10-13,税率引上げ（8%）
+2019-10-01,9999-12-31,10,8,https://www.mof.go.jp/tax_policy/summary/consumption_tax/index.html,2025-10-13,税率10%に引上げ・軽減税率8%導入
