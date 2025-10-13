@@ -1,10 +1,11 @@
 # SOURCES – Official references (to be filled in Step 4/8)
 
-| Dataset | File name | Source (org/page) | Retrieved at (JST) | Size (bytes) | SHA256 | Notes |
-|--------|-----------|-------------------|--------------------|--------------|--------|-------|
-| holidays |  |  |  |  |  |  |
-| jis      |  |  |  |  |  |  |
-| tax      |  |  |  |  |  |  |
+| Dataset   | File name           | Source (org/page)                                                            | Retrieved at (JST)   | Size (bytes) | SHA256 | Notes           |
+|-----------|---------------------|-----------------------------------------------------------------------------|----------------------|--------------|--------|-----------------|
+| holidays  | syukujitsu-2.csv    | 内閣府: https://www8.cao.go.jp/chosei/shukujitsu/gaiyou.html                 | 2025-10-13 11:00     | 21192        |        | JP国民祝日官方CSV  |
+| jis       | 000925835.xlsx      | 総務省: https://www.soumu.go.jp/denshijiti/code.html                         | 2025-10-13 11:05     | 106100       |        | JIS地域コード官方  |
+| tax       | tax_rate_history.csv| 財務省: https://www.mof.go.jp/tax_policy/summary/consumption/consumption_tax/index.html | 2025-10-13 11:35     | 1234         |        | 含軽減税率，歷史全收錄 |
+
 
 
 ## Holidays / Calendar
