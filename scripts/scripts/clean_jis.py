@@ -64,3 +64,4 @@ df.to_csv(OUTPUT_PATH, index=False, encoding="utf-8", lineterminator="\n")
 
 print(f"✅ jis_prefecture_city.csv 已輸出到：{OUTPUT_PATH}")
 print(df.head())
+
