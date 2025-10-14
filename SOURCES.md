@@ -1,10 +1,11 @@
-# SOURCES – Official references (to be filled in Step 4/8)
+# SOURCES – Official Data References
 
-| Dataset   | File name           | Source (org/page)                                                            | Retrieved at (JST)   | Size (bytes) | SHA256 | Notes           |
-|-----------|---------------------|-----------------------------------------------------------------------------|----------------------|--------------|--------|-----------------|
-| holidays  | syukujitsu-2.csv    | 内閣府: https://www8.cao.go.jp/chosei/shukujitsu/gaiyou.html                 | 2025-10-13 11:00     | 21192        |        | JP国民祝日官方CSV  |
-| jis       | 000925835.xlsx      | 総務省: https://www.soumu.go.jp/denshijiti/code.html                         | 2025-10-13 11:05     | 106100       |        | JIS地域コード官方  |
-| tax       | tax_rate_history.csv| 財務省: https://www.mof.go.jp/tax_policy/summary/consumption/consumption_tax/index.html | 2025-10-13 11:35     | 1234         |        | 含軽減税率，歷史全收錄 |
+| Dataset | File name | Source (org/page) | Retrieved at (JST) | File size | SHA256 |
+|----------|------------|-------------------|--------------------|------------|--------|
+| holidays | syukuijitsu-2.csv | 内閣府: [https://www8.cao.go.jp/chosei/shukujitsu/gaiyou.html](https://www8.cao.go.jp/chosei/shukujitsu/gaiyou.html) | 2025-10-13 11:00 | *(待填)* | *(待填)* |
+| jis | 000925835.xlsx | 総務省: [https://www.soumu.go.jp/denshijiti/code.html](https://www.soumu.go.jp/denshijiti/code.html) | 2025-10-13 11:05 | *(待填)* | *(待填)* |
+| tax | tax_rate_history.csv | 財務省: [https://www.mof.go.jp/tax_policy/summary/consumption/consumption_tax/index.html](https://www.mof.go.jp/tax_policy/summary/consumption/consumption_tax/index.html) | 2025-10-13 11:35 | 609 Bytes | a4fdcedf920ee2aa61e66c4417a9c7e53fdf427d35cc9a06d7bd80d07c2a4164 |
+
 
 
 
