@@ -27,7 +27,7 @@ df = df.sort_values("start_date").reset_index(drop=True)
 
 # --- 輸出 ---
 OUTPUT_PATH.parent.mkdir(parents=True, exist_ok=True)
-df.to_csv(OUTPUT_PATH, index=False, encoding="utf-8", line_terminator="\n")
+df.to_csv(OUTPUT_PATH, index=False, encoding="utf-8", lineterminator="\n")
 
 print(f"✅ tax_rate_clean.csv 已輸出到：{OUTPUT_PATH}")
 print(df.head())
