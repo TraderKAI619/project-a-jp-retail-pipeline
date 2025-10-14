@@ -36,7 +36,7 @@ df = read_table(RAW_PATH)
 
 print("🧹 Normalizing columns...")
 
-# 去除全形空白與前後空格（避免 applymap 警告）
+# 去除全形空白與前後空格（新版寫法，避免 applymap 警告）
 def _strip_fullwidth(x):
     if isinstance(x, str):
         x = x.replace("\u3000", " ").strip()
@@ -46,7 +46,7 @@ df = df.apply(lambda col: col.map(_strip_fullwidth) if col.dtype == object else 
 # 欄名正規化（去空白 → 底線 → 小寫）
 df.columns = [re.sub(r"\s+", "_", c.strip()).lower() for c in df.columns]
 
-# 常見日文欄名對應（含內閣府檔案實際欄名）
+# 常見日文欄名對應（✅ 已加上你的實際欄名）
 rename_map = {
     "日付": "date",
     "年月日": "date",
@@ -72,14 +72,12 @@ for col in expected_cols:
 df = df[expected_cols]
 
 # 日期格式清洗與標準化 → YYYY-MM-DD
-# 先統一分隔符，去掉「年/月/日」等非數字
 df["date"] = (
     df["date"]
     .astype(str)
     .str.replace(r"[／/\.]", "-", regex=True)
     .str.replace(r"[^0-9\-]", "", regex=True)
 )
-# 轉 datetime（自動判別組合），錯誤轉 NaT
 df["date"] = pd.to_datetime(df["date"], errors="coerce", format="mixed")
 
 bad_date = df["date"].isna().sum()
