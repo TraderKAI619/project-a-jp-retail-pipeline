@@ -36,19 +36,25 @@ df = read_table(RAW_PATH)
 
 print("🧹 Normalizing columns...")
 
-# 去除全形空白與前後空格
-df = df.applymap(lambda x: x.strip().replace('\u3000', ' ') if isinstance(x, str) else x)
+# 去除全形空白與前後空格（避免 applymap 警告）
+def _strip_fullwidth(x):
+    if isinstance(x, str):
+        x = x.replace("\u3000", " ").strip()
+    return x
+df = df.apply(lambda col: col.map(_strip_fullwidth) if col.dtype == object else col)
 
 # 欄名正規化（去空白 → 底線 → 小寫）
-df.columns = [re.sub(r'\s+', '_', c.strip()).lower() for c in df.columns]
+df.columns = [re.sub(r"\s+", "_", c.strip()).lower() for c in df.columns]
 
-# 常見日文欄名對應
+# 常見日文欄名對應（含內閣府檔案實際欄名）
 rename_map = {
     "日付": "date",
     "年月日": "date",
     "国民の祝日": "holiday_name",
     "祝日名": "holiday_name",
     "名称": "holiday_name",
+    "国民の祝日・休日月日": "date",
+    "国民の祝日・休日名称": "holiday_name",
 }
 df = df.rename(columns=rename_map)
 
@@ -65,8 +71,17 @@ for col in expected_cols:
         df[col] = ""
 df = df[expected_cols]
 
-# 日期格式標準化 → YYYY-MM-DD
-df["date"] = pd.to_datetime(df["date"], errors="coerce")
+# 日期格式清洗與標準化 → YYYY-MM-DD
+# 先統一分隔符，去掉「年/月/日」等非數字
+df["date"] = (
+    df["date"]
+    .astype(str)
+    .str.replace(r"[／/\.]", "-", regex=True)
+    .str.replace(r"[^0-9\-]", "", regex=True)
+)
+# 轉 datetime（自動判別組合），錯誤轉 NaT
+df["date"] = pd.to_datetime(df["date"], errors="coerce", format="mixed")
+
 bad_date = df["date"].isna().sum()
 if bad_date > 0:
     print(f"⚠️ Found {bad_date} invalid dates after coercion. They will be dropped.")
