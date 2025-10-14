@@ -74,8 +74,13 @@ df["city_code"] = df["city_code"].astype(str).str.strip().str.zfill(5)
 df["pref_name"] = df["pref_name"].astype(str).str.strip()
 df["city_name"] = df["city_name"].astype(str).str.strip()
 
-# 去重、排序
-df = df.dropna(subset=["pref_name", "city_name"]).drop_duplicates()
+# ✅ 聚合列與缺失值過濾（在去重、排序之前）
+df = df[~df["city_code"].str.endswith("000")]        # 移除 01000, 13000 等
+df["city_name"] = df["city_name"].replace({"nan": pd.NA, "": pd.NA})
+df = df.dropna(subset=["pref_name", "city_name"])
+
+# 去重、排序（簡化）
+df = df.drop_duplicates()
 df = df.sort_values(["pref_code", "city_code"]).reset_index(drop=True)
 
 # 輸出
