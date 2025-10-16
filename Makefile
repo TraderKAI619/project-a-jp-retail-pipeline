@@ -1,19 +1,22 @@
-.PHONY: intermediate silver validate gold validate_gold all everything
+PYTHON ?= python
 
-intermediate:
-	python scripts/build_intermediate.py
+.PHONY: silver validate gold validate_gold all everything ci clean
 
-silver: intermediate
-	python scripts/to_silver.py
+silver:
+	$(PYTHON) scripts/to_silver.py
 
 validate:
-	python scripts/validate_silver.py
+	$(PYTHON) scripts/validate_silver.py
 
-gold: silver validate
-	python scripts/to_gold.py
+gold:
+	$(PYTHON) scripts/to_gold.py
 
 validate_gold:
-	python scripts/validate_gold.py
+	$(PYTHON) scripts/validate_gold.py
 
 all: silver validate
-everything: intermediate silver validate gold validate_gold
+everything: silver validate gold validate_gold
+ci: everything
+
+clean:
+	rm -rf data/silver data/gold
