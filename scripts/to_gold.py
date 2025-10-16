@@ -116,7 +116,7 @@ def build_fact_sales(seed=42, years=(2024,)):
     base["gross_amount"] = base["net_amount"] + base["tax_amount"]
 
     cols = ["date_key","city_key","product_key","units","unit_price",
-            "net_amount","tax_rate","tax_amount","gross_amount","revenue_jpy"]
+            "net_amount","tax_rate","tax_amount","gross_amount"]
     base[cols].to_csv(GOLD_F / "fact_sales.csv", index=False)
     print(f"✅ Saved: {GOLD_F/'fact_sales.csv'} ({len(base)})")
 
