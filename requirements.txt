@@ -1,3 +1,4 @@
 pandas>=2.0
 numpy>=1.26
-duckdb>=1.1.0
+# 可選，跑 DuckDB demo 用：
+duckdb>=0.9
