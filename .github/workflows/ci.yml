@@ -1,17 +1,44 @@
+# .github/workflows/ci.yml
 name: CI
 
 on:
   push:
+    branches: [main]
   pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
-  build:
+  build-and-validate:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
+
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
         with:
           python-version: '3.12'
           cache: 'pip'
-      - run: pip install -r requirements.txt
-      - run: make everything
+
+      - name: Install deps
+        run: |
+          python -V
+          pip install -r requirements.txt
+
+      - name: Build all layers + validations
+        run: make everything
+
+      - name: Upload gold artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: gold-csvs
+          path: |
+            data/gold/dims/*.csv
+            data/gold/facts/*.csv
