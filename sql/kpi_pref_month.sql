@@ -1,7 +1,7 @@
 -- KPI：都道府縣 × 月份 的營收排名
--- 以 yyyymm 聚合，觀察各都道府縣月度表現
 WITH f AS (
-  SELECT * FROM read_csv_auto('data/gold/facts/fact_sales.csv')
+  SELECT date_key, city_key, COALESCE(revenue_jpy, gross_amount) AS revenue
+  FROM read_csv_auto('data/gold/facts/fact_sales.csv')
 ),
 d AS (
   SELECT date_key, CAST(date_key/100 AS INT) AS yyyymm
@@ -15,7 +15,7 @@ SELECT
   g.pref_code,
   g.pref_name,
   d.yyyymm,
-  ROUND(SUM(gross_amount)/1e8, 2) AS rev_億日圓
+  ROUND(SUM(f.revenue)/1e8, 2) AS rev_億日圓
 FROM f
 JOIN d USING (date_key)
 JOIN g USING (city_key)
