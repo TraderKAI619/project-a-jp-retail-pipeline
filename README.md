@@ -50,7 +50,7 @@ python scripts/run_demo.py
 
 ## Architecture
 [📐 Full Architecture & ERD](docs/architecture.md)
-The pipeline follows a **3-layer Medallion pattern**:
+The pipeline uses a **4-layer Medallion-style pattern** (Raw → Intermediate → Silver → Gold):
 
 - **Raw**: official files as-is (holidays, JIS codes, tax history)
 - **Intermediate**: encoding fixes, header normalization, de-duplication
