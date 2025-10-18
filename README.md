@@ -11,8 +11,6 @@
 A production-ready batch ETL pipeline for Japanese retail analytics using the Medallion architecture.
 Integrates official government data (holidays, consumption tax history, JIS region codes) with synthetic sales for KPI demos.
 
-Perfect for portfolios, learning DE patterns, or as a template for JP-specific analytics.
-
 Perfect for portfolios, learning DE patterns, or as a template for JP-specific analytics. 
 ## ⚡ 3-Minute Quick Start (Total ~3 min)
 ### Outputs (after build)
