@@ -1,6 +1,6 @@
--- KPI: 稅率境界（2019/10）前後的銷售額
+-- KPI: 稅率境界（2019/10）前後（以 dim_date.tax_rate 為準）
 WITH f AS (
-  SELECT date_key, gross_amount
+  SELECT date_key, COALESCE(revenue_jpy, gross_amount) AS revenue
   FROM read_csv_auto('data/gold/facts/fact_sales.csv')
 ),
 d AS (
@@ -9,7 +9,7 @@ d AS (
 )
 SELECT
   d.tax_rate,
-  ROUND(SUM(f.gross_amount) / 1e8, 2) AS rev_億日圓
+  ROUND(SUM(f.revenue) / 1e8, 2) AS rev_億日圓
 FROM f
 JOIN d USING (date_key)
 WHERE d.date_key BETWEEN (SELECT MIN(date_key) FROM f)
