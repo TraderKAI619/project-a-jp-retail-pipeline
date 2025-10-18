@@ -3,7 +3,7 @@
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-**日本語** | [**English**](README.md) | [**繁體中文**](README_zh.md)
+**日本語** | [**English**](README.md) | 
 
 メダリオンアーキテクチャで構築した、日本の小売分析向けバッチETLパイプライン。内閣府の祝日、消費税履歴（SCD-2）、JIS 地域コードと合成売上データを統合し、KPI デモを再現可能にします。
 
