@@ -1,6 +1,8 @@
--- KPI: 稅率境界（2019/10）前後的銷售額（以日期維度上的 tax_rate 為準）
+-- KPI: 稅率境界（2019/10）前後的銷售額（以日期維度的 tax_rate 為準）
 WITH f AS (
-  SELECT * FROM read_csv_auto('data/gold/facts/fact_sales.csv')
+  -- 只保留用得到的欄位，避免與 d.tax_rate 重名
+  SELECT date_key, gross_amount
+  FROM read_csv_auto('data/gold/facts/fact_sales.csv')
 ),
 d AS (
   SELECT date_key, tax_rate
