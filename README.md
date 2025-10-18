@@ -49,7 +49,7 @@ python scripts/run_demo.py
 - Pre-built KPI queries: holiday lift, tax impact, geo trends
 
 ## Architecture
-
+[📐 Full Architecture & ERD](docs/architecture.md)
 The pipeline follows a **3-layer Medallion pattern**:
 
 - **Raw**: official files as-is (holidays, JIS codes, tax history)
