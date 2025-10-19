@@ -333,3 +333,29 @@ License
 
 MIT — see LICENSE
 .
+
+## 📦 CI/CD & Downloadable Artifacts
+
+Every successful CI run produces **downloadable artifacts**:
+
+### What's included
+- **Gold CSVs**: Fully validated dimensional & fact tables
+  - `dim_date.csv` (26,991 rows)
+  - `dim_geo.csv` (1,794 rows)  
+  - `dim_product.csv` (8 rows)
+  - `fact_calendar.csv` (26,991 rows)
+  - `fact_sales.csv` (400 rows)
+- **Reports**: Auto-generated KPI analysis
+  - `report.md` (Markdown summary)
+  - `uplift.csv` (Holiday revenue comparison)
+
+### How to download
+1. Visit [Actions](https://github.com/TraderKAI619/project-a-jp-retail-pipeline/actions)
+2. Click any successful run with ✅
+3. Scroll to bottom
+4. Download **`gold-and-reports`** artifact (~400 KB)
+
+### Automation schedule
+- **CI**: Runs on every push/PR
+- **Nightly ETL**: UTC 18:00 daily (JST 03:00 next day)
+
