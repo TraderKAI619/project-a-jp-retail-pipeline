@@ -359,3 +359,18 @@ Every successful CI run produces **downloadable artifacts**:
 - **CI**: Runs on every push/PR
 - **Nightly ETL**: UTC 18:00 daily (JST 03:00 next day)
 
+## Known Limitations & Future Work
+- **Scope:** Demo scale (~1k rows/day), single-threaded, in-process DuckDB.
+- **Production:** >100k rows/day → S3 partitioning, Parquet, Glue jobs, Athena; add monitoring/alerts and schema-evolution strategy.
+- **Trade-offs:** CSV artifacts for readability; Python/JSON Schema first; natural keys for idempotent upserts.
+
+## Performance Snapshot
+- Dataset: `<fill N rows / M MB>`
+- Build: `make everything` elapsed `<T sec>`, Max RSS `<R MB>`
+- CI: tests + schema checks `<t sec>`, artifact size `<a MB>`
+*(Numbers captured via `/usr/bin/time -v make everything | tee reports/perf.txt`.)*
+
+## Tooling Transparency
+- I use AI tools (Copilot/ChatGPT) for boilerplate and speed, but **architecture decisions, data models, DQ rules, and CI gates are my own**.  
+- This repo prioritizes **reproducibility & auditability** (schemas, tests, artifacts).
+
