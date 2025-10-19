@@ -2,13 +2,13 @@ PYTHON ?= python
 # 讓配方行用 '>' 當前綴，不再依賴 Tab
 .RECIPEPREFIX := >
 
-.PHONY: intermediate silver validate gold validate_gold all everything ci clean demo
+.PHONY: intermediate silver validate gold validate_gold report all everything ci clean demo
 
 # 先把 raw_official/*/_staging → data/intermediate/*
 intermediate:
 > $(PYTHON) scripts/build_intermediate.py
 
-+ silver:
+silver:
 > $(PYTHON) scripts/to_silver.py
 
 validate:
@@ -20,8 +20,12 @@ gold:
 validate_gold:
 > $(PYTHON) scripts/validate_gold.py
 
+# 新增：報表輸出（Markdown + CSV）
+report:
+> $(PYTHON) scripts/generate_report.py
+
 # 一鍵跑完全流程（本地 / CI 都用這個）
-everything: silver validate gold validate_gold
+everything: silver validate gold validate_gold report
 
 # 習慣別名
 all: silver validate
