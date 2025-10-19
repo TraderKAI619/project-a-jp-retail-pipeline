@@ -15,37 +15,32 @@ jobs:
   build-and-validate:
     runs-on: ubuntu-latest
     timeout-minutes: 10
-    
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      
+
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-          cache: 'pip'
-      
+          cache: pip
+
       - name: Install dependencies
         run: |
-          python -V
-          pip install -r requirements.txt
-      
-      - name: Build all layers + validations
-        run: make everything
-      
-      - name: Install test dependencies
-        run: |
-          pip install pytest pytest-cov duckdb
-      
-      - name: Run tests with coverage
-        run: |
-          pytest tests/ -v --cov=scripts --cov-report=term-missing
-      
-      - name: Upload gold artifacts
+          python -m pip install -r requirements.txt
+
+      - name: Build
+        run: make everything   # report 已併入 everything
+
+      - name: Test
+        run: pytest -q tests/ --cov=scripts --cov-report=term-missing
+
+      - name: Upload artifacts
+        if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: gold-csvs
+          name: gold-and-reports
           path: |
-            data/gold/dims/*.csv
-            data/gold/facts/*.csv
+            data/gold/**
+            reports/**
