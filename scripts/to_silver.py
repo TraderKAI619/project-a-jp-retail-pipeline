@@ -1,58 +1,46 @@
+#!/usr/bin/env python3
+import pathlib
 import pandas as pd
-from pathlib import Path
 
-INTERMEDIATE_DIR = Path("data/intermediate")
-SILVER_DIR = Path("data/silver")
-(SILVER_DIR / "holidays").mkdir(parents=True, exist_ok=True)
-(SILVER_DIR / "jis").mkdir(parents=True, exist_ok=True)
-(SILVER_DIR / "tax").mkdir(parents=True, exist_ok=True)
+ROOT = pathlib.Path(__file__).resolve().parents[1]
+INT = ROOT / "data" / "intermediate"
+SILVER = ROOT / "data" / "silver"
 
-def clean_holidays():
-    src = INTERMEDIATE_DIR / "holidays/jp_holidays_clean.csv"
-    dst = SILVER_DIR / "holidays/jp_holidays_silver.csv"
-    df = pd.read_csv(src, dtype=str)
-    # 統一欄名
-    # 你的中間層文件寫的是 name_ja/name_en/is_substitute... 這裡我們先用最小可行欄位
-    # 若未來補上更多欄位，只要在這裡擴充 mapping 即可
-    if set(df.columns) >= {"date","holiday_name","category"}:
-        df = df[["date","holiday_name","category"]]
-    else:
-        df.columns = ["date","holiday_name","category"]
-    df["date"] = pd.to_datetime(df["date"], errors="coerce")
-    df = df.sort_values("date")
-    df.to_csv(dst, index=False)
-    print(f"✅ Saved: {dst}")
-
-def clean_jis():
-    src = INTERMEDIATE_DIR / "jis/jis_prefecture_city.csv"
-    dst = SILVER_DIR / "jis/jis_prefecture_city_silver.csv"
-    df = pd.read_csv(src, dtype=str)
-    # 統一欄名
-    # 若未來改成 pref_name_ja/city_name_ja 也可以在此處 mapping
-    if set(df.columns) >= {"pref_code","pref_name","city_code","city_name"}:
-        df = df[["pref_code","pref_name","city_code","city_name"]]
-    else:
-        df.columns = ["pref_code","pref_name","city_code","city_name"]
-    df.to_csv(dst, index=False)
-    print(f"✅ Saved: {dst}")
-
-def clean_tax():
-    src = INTERMEDIATE_DIR / "tax/tax_rate_clean.csv"
-    dst = SILVER_DIR / "tax/tax_rate_silver.csv"
-    df = pd.read_csv(src, dtype=str)
-    # 支援將來加入 reduced_tax_rate 的擴充
-    base_cols = ["start_date","end_date","tax_rate"]
-    if set(df.columns) >= set(base_cols):
-        df = df[base_cols]
-    else:
-        df.columns = base_cols[:len(df.columns)]
-    df["tax_rate"] = pd.to_numeric(df["tax_rate"], errors="coerce")
-    df.to_csv(dst, index=False)
-    print(f"✅ Saved: {dst}")
+def to_silver():
+    print("🚀 Intermediate → Silver ...")
+    
+    # === Holidays ===
+    df_h = pd.read_csv(INT / "holidays" / "jp_holidays_clean.csv")
+    # 添加 date_key (YYYYMMDD 格式)
+    df_h['date'] = pd.to_datetime(df_h['date'])
+    df_h['date_key'] = df_h['date'].dt.strftime('%Y%m%d').astype(int)
+    # 添加 is_holiday (都是 True)
+    df_h['is_holiday'] = True
+    # 重命名列
+    df_h = df_h.rename(columns={'category': 'holiday_category'})
+    # 重新排序列
+    df_h = df_h[['date_key', 'date', 'is_holiday', 'holiday_name', 'holiday_category']]
+    
+    out_h = SILVER / "holidays" / "jp_holidays_silver.csv"
+    out_h.parent.mkdir(parents=True, exist_ok=True)
+    df_h.to_csv(out_h, index=False, encoding="utf-8")
+    print(f"✅ Saved: {out_h}")
+    
+    # === JIS ===
+    df_j = pd.read_csv(INT / "jis" / "jis_prefecture_city.csv")
+    out_j = SILVER / "jis" / "jis_prefecture_city_silver.csv"
+    out_j.parent.mkdir(parents=True, exist_ok=True)
+    df_j.to_csv(out_j, index=False, encoding="utf-8")
+    print(f"✅ Saved: {out_j}")
+    
+    # === Tax ===
+    df_t = pd.read_csv(INT / "tax" / "tax_rate_clean.csv")
+    out_t = SILVER / "tax" / "tax_rate_silver.csv"
+    out_t.parent.mkdir(parents=True, exist_ok=True)
+    df_t.to_csv(out_t, index=False, encoding="utf-8")
+    print(f"✅ Saved: {out_t}")
+    
+    print("🎉 All Silver datasets ready!")
 
 if __name__ == "__main__":
-    print("🚀 Intermediate → Silver ...")
-    clean_holidays()
-    clean_jis()
-    clean_tax()
-    print("🎉 All Silver datasets ready!")
+    to_silver()

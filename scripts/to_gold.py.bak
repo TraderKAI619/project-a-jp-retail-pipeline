@@ -1,12 +1,10 @@
+from pathlib import Path
 import pandas as pd
 import numpy as np
-from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[1]
-SILVER = ROOT / "data/silver"
-GOLD_D = ROOT / "data/gold/dims"
-GOLD_F = ROOT / "data/gold/facts"
-
+SILVER = Path("data/silver")
+GOLD_D = Path("data/gold/dims")
+GOLD_F = Path("data/gold/facts")
 GOLD_D.mkdir(parents=True, exist_ok=True)
 GOLD_F.mkdir(parents=True, exist_ok=True)
 
@@ -34,10 +32,11 @@ def build_dim_date():
     df["dow"]        = df["date"].dt.weekday + 1
     df["is_weekend"] = df["dow"].isin([6,7])
 
-    # join holidays (只取需要的列，不包含 date_key，避免冲突)
-    h = hol[["date","is_holiday","holiday_name","holiday_category"]].copy()
+    # join holidays
+    h = hol[["date","holiday_name","category"]].copy()
+    h.rename(columns={"category":"holiday_category"}, inplace=True)
     df = df.merge(h, on="date", how="left")
-    df["is_holiday"] = df["is_holiday"].fillna(False).astype(bool)
+    df["is_holiday"] = df["holiday_name"].notna()
 
     # attach tax_rate by effective range (merge_asof trick)
     tax = pd.read_csv(SILVER / "tax/tax_rate_silver.csv", dtype=str)
@@ -61,9 +60,8 @@ def build_dim_date():
 # ---------- Dim Geo ----------
 def build_dim_geo():
     jis = pd.read_csv(SILVER / "jis/jis_prefecture_city_silver.csv", dtype=str)
-    out = jis.copy()
-    out["city_key"] = out["pref_code"] + out["city_code"]
-    out = out[["city_key","pref_code","pref_name","city_code","city_name"]]
+    jis["city_key"] = jis["pref_code"].str.zfill(2) + "-" + jis["city_code"].str.zfill(5)
+    out = jis[["city_key","pref_code","pref_name","city_code","city_name"]].drop_duplicates()
     out.to_csv(GOLD_D / "dim_geo.csv", index=False)
     print(f"✅ Saved: {GOLD_D/'dim_geo.csv'} ({len(out)})")
 
@@ -77,66 +75,54 @@ def build_fact_calendar():
 # ---------- Dim Product (NEW) ----------
 def build_dim_product():
     products = [
-        ("P001","Electronics"),
-        ("P002","Fashion"),
-        ("P003","Food"),
-        ("P004","Home"),
-        ("P005","Books"),
-        ("P006","Sports"),
-        ("P007","Beauty"),
-        ("P008","Toys"),
+        ("P001","飲料"), ("P002","零食"), ("P003","家居"),
+        ("P004","美妝"), ("P005","文具"), ("P006","嬰幼"),
+        ("P007","寵物"), ("P008","保健"),
     ]
     df = pd.DataFrame(products, columns=["product_key","category"])
     df.to_csv(GOLD_D / "dim_product.csv", index=False)
     print(f"✅ Saved: {GOLD_D/'dim_product.csv'} ({len(df)})")
 
-# ---------- Fact Sales (NEW) ----------
-def build_fact_sales():
-    np.random.seed(42)
-    dd = pd.read_csv(GOLD_D / "dim_date.csv")
-    geo = pd.read_csv(GOLD_D / "dim_geo.csv")
-    prod = pd.read_csv(GOLD_D / "dim_product.csv")
+# ---------- Fact Sales (NEW, synthetic) ----------
+def build_fact_sales(seed=42, years=(2024,)):
+    rng = np.random.default_rng(seed)
 
-    date_keys = dd["date_key"].sample(n=min(400, len(dd)), replace=True).tolist()
-    city_keys = geo["city_key"].sample(n=min(400, len(geo)), replace=True).tolist()
-    prod_keys = prod["product_key"].sample(n=min(400, len(prod)), replace=True).tolist()
+    dd  = pd.read_csv(GOLD_D / "dim_date.csv", dtype={"date_key":int}, parse_dates=["date"])
+    geo = pd.read_csv(GOLD_D / "dim_geo.csv", dtype=str)
+    prod= pd.read_csv(GOLD_D / "dim_product.csv", dtype=str)
 
-    sales_list = []
-    for dk in date_keys:
-        ck = np.random.choice(city_keys)
-        pk = np.random.choice(prod_keys)
-        units = np.random.randint(1, 10)
-        unit_price = np.random.uniform(500, 5000)
-        net_amt = units * unit_price
+    # 一年、50 個城市、8 產品 → 大約 146k rows
+    dd = dd[dd["date"].dt.year.isin(years)]
+    cities = geo.sample(n=min(50, len(geo)), random_state=seed)["city_key"].tolist()
 
-        row = dd[dd["date_key"] == dk]
-        if row.empty:
-            tr = 0.1
-        else:
-            tr = row["tax_rate"].iloc[0]
-            if pd.isna(tr):
-                tr = 0.1
+    # 笛卡兒積（日期 × 城市 × 產品）
+    base = (dd.assign(key=1)[["date_key","date","key"]]
+              .merge(pd.DataFrame({"city_key":cities, "key":[1]*len(cities)}), on="key")
+              .merge(prod.assign(key=1)[["product_key","key"]], on="key")
+              .drop(columns="key"))
 
-        tax_amt = net_amt * tr
-        gross_amt = net_amt + tax_amt
+    # 隨機生成銷售
+    base["units"]      = rng.integers(0, 40, size=len(base))          # 0~39
+    base["unit_price"] = rng.choice([120,150,180,199,220,250,299], size=len(base)).astype(float)
 
-        sales_list.append({
-            "date_key": dk,
-            "city_key": ck,
-            "product_key": pk,
-            "units": units,
-            "unit_price": round(unit_price, 2),
-            "net_amount": round(net_amt, 2),
-            "tax_rate": tr,
-            "tax_amount": round(tax_amt, 2),
-            "gross_amount": round(gross_amt, 2)
-        })
+    # 稅率：取該日 dim_date 稅率
+    rate = dd[["date_key","tax_rate"]].copy()
+    base = base.merge(rate, on="date_key", how="left")
+    base["tax_rate"]   = pd.to_numeric(base["tax_rate"], errors="coerce").fillna(10.0)
 
-    fact_sales = pd.DataFrame(sales_list)
-    fact_sales.to_csv(GOLD_F / "fact_sales.csv", index=False)
-    print(f"✅ Saved: {GOLD_F/'fact_sales.csv'} ({len(fact_sales)})")
+    # 金額
+    base["net_amount"]   = (base["units"] * base["unit_price"]).round(0)
+    base["tax_amount"]   = (base["net_amount"] * (base["tax_rate"]/100.0)).round(0)
+    base["gross_amount"] = base["net_amount"] + base["tax_amount"]
+
+    cols = ["date_key","city_key","product_key","units","unit_price",
+            "net_amount","tax_rate","tax_amount","gross_amount"]
+    base[cols].to_csv(GOLD_F / "fact_sales.csv", index=False)
+    print(f"✅ Saved: {GOLD_F/'fact_sales.csv'} ({len(base)})")
 
 if __name__ == "__main__":
+    GOLD_D.mkdir(parents=True, exist_ok=True)
+    GOLD_F.mkdir(parents=True, exist_ok=True)
     build_dim_date()
     build_dim_geo()
     build_fact_calendar()
