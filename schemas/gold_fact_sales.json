@@ -1,0 +1,17 @@
+{
+  "name": "fact_sales",
+  "primaryKey": ["date_key","city_key","product_key"],
+  "columns": {
+    "date_key": "int",
+    "city_key": "string",
+    "product_key": "string",
+    "units": "int",
+    "unit_price": "float",
+    "net_amount": "float",
+    "tax_rate": "float",
+    "tax_amount": "float",
+    "gross_amount": "float"
+  },
+  "notNull": ["date_key","city_key","product_key","units","gross_amount"],
+  "uniques": [["date_key","city_key","product_key"]]
+}
