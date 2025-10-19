@@ -16,3 +16,15 @@ Perfect for portfolios, learning DE patterns, or as a template for JP-specific a
 - `data/silver/{holidays,jis,tax}/...`
 - `data/gold/dims/{dim_date,dim_geo,dim_product}.csv`
 - `data/gold/facts/{fact_calendar,fact_sales}.csv`
+
+## 📦 CI/CD & Downloadable Artifacts
+
+Every CI run produces downloadable artifacts:
+- **Gold CSVs**: Fully validated dimensional & fact tables
+- **Reports**: Auto-generated KPI analysis (Markdown + CSV)
+
+**How to download:**
+1. Go to [Actions](../../actions)
+2. Click the latest successful run
+3. Download `gold-and-reports` artifact
+

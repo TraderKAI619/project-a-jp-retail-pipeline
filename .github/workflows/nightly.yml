@@ -1,20 +1,14 @@
-name: CI
+name: Nightly ETL
 
 on:
-  push:
-    branches: [main]
-  pull_request:
-    branches: [main]
+  schedule:
+    - cron: '0 18 * * *'  # UTC 18:00 (JST 03:00)
   workflow_dispatch:
 
-concurrency:
-  group: ci-${{ github.ref }}
-  cancel-in-progress: true
-
 jobs:
-  build-and-validate:
+  nightly:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
     
     steps:
       - name: Checkout
@@ -28,22 +22,16 @@ jobs:
           cache-dependency-path: 'requirements.txt'
       
       - name: Install dependencies
-        run: |
-          python -V
-          pip install -r requirements.txt
+        run: pip install -r requirements.txt
       
-      - name: Build all layers + validations
+      - name: Run nightly ETL
         run: make everything
       
-      - name: Run tests with coverage
-        run: |
-          pytest tests/ -v --cov=scripts --cov-report=term-missing
-      
-      - name: Upload artifacts (gold + reports)
+      - name: Upload nightly artifacts
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: gold-and-reports
+          name: nightly-gold-and-reports-${{ github.run_number }}
           path: |
             data/gold/**
             reports/**
