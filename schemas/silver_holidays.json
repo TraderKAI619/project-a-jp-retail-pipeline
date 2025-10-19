@@ -1,0 +1,13 @@
+{
+  "name": "jp_holidays_silver",
+  "primaryKey": ["date_key"],
+  "columns": {
+    "date_key": "int",
+    "date": "date",
+    "is_holiday": "bool",
+    "holiday_name": "string",
+    "holiday_category": "string"
+  },
+  "notNull": ["date_key", "date", "is_holiday"],
+  "uniques": [["date_key"]]
+}
