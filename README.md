@@ -1,6 +1,7 @@
 # Project A — Japan Retail Data Pipeline (MVP)
 
 [![CI](https://github.com/TraderKAI619/project-a-jp-retail-pipeline/actions/workflows/ci.yml/badge.svg)](https://github.com/TraderKAI619/project-a-jp-retail-pipeline/actions/workflows/ci.yml)
+[![Nightly ETL](https://github.com/TraderKAI619/project-a-jp-retail-pipeline/actions/workflows/nightly.yml/badge.svg)](https://github.com/TraderKAI619/project-a-jp-retail-pipeline/actions/workflows/nightly.yml)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
