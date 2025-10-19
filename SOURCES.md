@@ -4,8 +4,8 @@
 
 | Dataset  | File name            | Source (org/page)                                                                                                                                   | Retrieved at (JST)   | File size | SHA256 |
 |----------|----------------------|------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------|-----------|--------|
-| holidays | syukuijitsu-2.csv    | 内閣府: [国民の祝日について](https://www8.cao.go.jp/chosei/shukujitsu/gaiyou.html)                                 | 2025-10-13 11:00 JST | *(to fill)* | *(to fill)* |
-| jis      | 000925835.xlsx       | 総務省: [全国地方公共団体コード](https://www.soumu.go.jp/denshijiti/code.html)                                                | 2025-10-13 11:05 JST | *(to fill)* | *(to fill)* |
+| holidays | syukujitsu-2.csv    | 内閣府: [国民の祝日について](https://www8.cao.go.jp/chosei/shukujitsu/gaiyou.html)                                 | 2025-10-13 11:00 JST | 20K | 1abbdac0fd72f7b754220e42844e9db7f5272cbae77919c559d85a8457d65cbb |
+| jis      | 000925835.xlsx       | 総務省: [全国地方公共団体コード](https://www.soumu.go.jp/denshijiti/code.html)                                                | 2025-10-13 11:05 JST | 104K | cb0f09f52cd29dd48ae1a2d75c7e1c2639e5920444ead22c89f4a9532ae922d0 |
 | tax      | tax_rate_history.csv | 財務省: [消費税の概要](https://www.mof.go.jp/tax_policy/summary/consumption/consumption_tax/index.html) | 2025-10-13 11:35 JST | 609 Bytes | a4fdcedf920ee2aa61e66c4417a9c7e53fdf427d35cc9a06d7bd80d07c2a4164 |
 
 > **Note:** Full checksums & sizes live in `reports/raw_sha256.txt` / `reports/raw_sizes.txt`.  
