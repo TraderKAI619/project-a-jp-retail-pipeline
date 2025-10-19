@@ -9,20 +9,21 @@ GOLD = ROOT / "data" / "gold"
 OUT = ROOT / "reports"
 OUT.mkdir(exist_ok=True)
 
-def _gold(p):  # convenience
+def _gold(p):
     return (GOLD / p).as_posix()
 
 def main():
-    # 基本前置檢查（有時使用者忘了先 build gold）
+    # 前置檢查：gold 檔案一定要在
     need = [GOLD / "facts" / "fact_sales.csv", GOLD / "dims" / "dim_date.csv"]
     missing = [str(p) for p in need if not p.exists()]
     if missing:
         raise SystemExit(
-            "Gold 層尚未就緒，請先執行 `make gold` 或 `make everything`。\n缺少：\n- " + "\n- ".join(missing)
+            "Gold 層尚未就緒，請先 `make gold` 或 `make everything`。\n缺少：\n- " + "\n- ".join(missing)
         )
 
     con = duckdb.connect()
 
+    # KPI：假日 vs 非假日營收
     sql_uplift = f"""
     WITH f AS (SELECT * FROM read_csv_auto('{_gold('facts/fact_sales.csv')}')),
          d AS (SELECT date_key, is_holiday FROM read_csv_auto('{_gold('dims/dim_date.csv')}'))
@@ -33,10 +34,10 @@ def main():
     """
     uplift = con.execute(sql_uplift).fetch_df()
 
-    # CSV 報表
+    # 寫 CSV
     uplift.to_csv(OUT / "uplift.csv", index=False, encoding="utf-8")
 
-    # Markdown 報表
+    # 寫 Markdown（需要 tabulate）
     now = dt.datetime.now().strftime("%Y-%m-%d %H:%M")
     md = [
         "# Daily Report",
