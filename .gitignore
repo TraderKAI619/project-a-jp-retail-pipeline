@@ -209,3 +209,4 @@ __marimo__/
 # local generated gold extras
 /data/gold/dims/dim_product.csv
 /data/gold/facts/fact_sales.csv
+reports/
