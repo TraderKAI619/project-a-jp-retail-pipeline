@@ -15,7 +15,9 @@
 
 ## Verification & Reproducibility
 
-**Evidence files**
+**Evidence files** (generated locally, not in version control)
+
+> 💡 **Note:** These files are `.gitignore`d and generated locally. Run the commands below to create them.
 - [`reports/raw_sha256.txt`](./reports/raw_sha256.txt) – Complete SHA256 checksums  
 - [`reports/raw_sizes.txt`](./reports/raw_sizes.txt) – File sizes
 
