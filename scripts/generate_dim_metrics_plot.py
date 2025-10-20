@@ -1,6 +1,6 @@
 import pandas as pd
 import matplotlib
-matplotlib.use('Agg')  # Codespaces 需要這行
+matplotlib.use('Agg')  
 import matplotlib.pyplot as plt
 from pathlib import Path
 
@@ -23,6 +23,10 @@ axes[1,0].axhline(0.5, ls="--", color='red', alpha=0.5)
 
 axes[1,1].bar(hist["date"], hist["holidays_next30_count"])
 axes[1,1].set_title("Holidays in Next 30 Days (count)")
+
+for ax in axes.flat:
+    ax.tick_params(axis='x', rotation=45)
+    ax.xaxis.set_major_locator(plt.MaxNLocator(6))
 
 plt.tight_layout()
 plt.savefig("images/refdata_metrics.png", dpi=150)
