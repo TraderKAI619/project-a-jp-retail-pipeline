@@ -1,41 +1,21 @@
-PYTHON ?= python
+.PHONY: venv install analysis dashboard kill
 
-.RECIPEPREFIX := >
+PY=python
+PORT?=8501
 
-.PHONY: intermediate silver validate gold validate_gold report all everything ci clean demo
+venv:
+	python3 -m venv .venv
 
-# 先把 raw_official/*/_staging → data/intermediate/*
-intermediate:
-> $(PYTHON) scripts/build_intermediate.py
+install: venv
+	. .venv/bin/activate && pip install -U pip && pip install -r requirements.txt
 
-silver:
-> $(PYTHON) scripts/to_silver.py
+analysis:
+	. .venv/bin/activate && $(PY) scripts/run_gw_sql.py
 
-validate:
-> $(PYTHON) scripts/validate_silver.py
+dashboard:
+	. .venv/bin/activate && streamlit run analytics/dashboards/app.py \
+	  --server.address 0.0.0.0 --server.port $(PORT) \
+	  --server.headless true --server.enableCORS false --server.enableXsrfProtection false
 
-gold:
-> $(PYTHON) scripts/to_gold.py
-
-validate_gold:
-> $(PYTHON) scripts/validate_gold.py
-
-# 報表輸出（Markdown + CSV）
-report:
-> $(PYTHON) scripts/generate_report.py
-
-# 一鍵跑完全流程（本地 / CI 都用這個）
-everything: intermediate silver validate gold validate_gold report
-
-# 習慣別名
-all: silver validate
-
-# CI 入口
-ci: everything
-
-# Demo（可選）
-demo:
-> $(PYTHON) scripts/run_demo.py
-
-clean:
-> rm -rf data/silver data/gold data/intermediate
+kill:
+	pkill -f "streamlit" || true
