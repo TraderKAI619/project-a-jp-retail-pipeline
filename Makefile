@@ -53,3 +53,5 @@ logs:
 # 看行程
 ps:
 	ps aux | grep -i "[s]treamlit"
+.PHONY: everything
+everything: install analysis
