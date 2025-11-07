@@ -1,3 +1,0 @@
-1abbdac0fd72f7b754220e42844e9db7f5272cbae77919c559d85a8457d65cbb  data/raw_official/holidays/_staging/syukujitsu-2.csv
-a4fdcedf920ee2aa61e66c4417a9c7e53fdf427d35cc9a06d7bd80d07c2a4164  data/raw_official/tax/_staging/tax_rate_history.csv
-cb0f09f52cd29dd48ae1a2d75c7e1c2639e5920444ead22c89f4a9532ae922d0  data/raw_official/jis/_staging/000925835.xlsx

@@ -214,3 +214,7 @@ reports/
 !reports/
 !reports/figures/
 !reports/figures/*.png
+# ignore all under reports, except figures/*.png
+reports/*
+!reports/figures/
+!reports/figures/*.png
