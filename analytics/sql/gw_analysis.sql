@@ -7,3 +7,10 @@ SELECT * FROM (VALUES
   (11, '埼玉県',   0.471),
   (12, '千葉県',   0.462)
 ) AS t(pref_code, pref_name_ja, uplift_rate);
+-- 追加：category_contrib (category_name, uplift_contrib)
+-- デモ用
+SELECT * FROM (VALUES
+  ('旅行用品', 0.32),
+  ('日用品ミニ', 0.18),
+  ('食品', -0.05)
+) AS c(category_name, uplift_contrib);
