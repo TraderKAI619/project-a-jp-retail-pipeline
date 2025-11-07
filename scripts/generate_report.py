@@ -1,43 +1,56 @@
-import os, shutil, pandas as pd
+import os
+import sys
+import shutil
+import subprocess
+import pandas as pd
+from pathlib import Path
 
-os.makedirs("reports", exist_ok=True)
+REPORTS_DIR = Path("reports")
+ANALYTICS_DIR = Path("data/analytics")
+SRC_UPLIFT = ANALYTICS_DIR / "top_prefecture_uplift.csv"
+DST_UPLIFT = REPORTS_DIR / "uplift.csv"
+
+REPORTS_DIR.mkdir(parents=True, exist_ok=True)
+
 lines = ["# JP Retail Analytics — Daily Report", ""]
 
-def add_table(path, title):
+def add_table(path: Path, title: str):
     lines.append(f"## {title}")
-    if os.path.exists(path):
-        df = pd.read_csv(path)
-        lines.append(f"- rows: {len(df)}")
-        lines.append("")
+    if path.exists():
         try:
-            lines.append(df.head(5).to_markdown(index=False))
-            lines.append("")
-        except Exception:
-            pass
+            df = pd.read_csv(path)
+            lines.append(f"- rows: {len(df)}\n")
+            try:
+                lines.append(df.head(5).to_markdown(index=False))
+                lines.append("")
+            except Exception:
+                pass
+        except Exception as e:
+            lines.append(f"- failed to read: {path} ({e})\n")
     else:
-        lines.append(f"- file missing: {path}")
-        lines.append("")
+        lines.append(f"- file missing: {path}\n")
 
-# 來源（analytics）→ 目的地（reports）
-src_uplift = "data/analytics/top_prefecture_uplift.csv"
-dst_uplift = "reports/uplift.csv"
-if os.path.exists(src_uplift):
-    shutil.copyfile(src_uplift, dst_uplift)
-    print(f"Copied {src_uplift} -> {dst_uplift}")
+# 1) 確保 analytics 產出（若缺就呼叫 SQL 產生腳本）
+if not SRC_UPLIFT.exists():
+    try:
+        subprocess.run([sys.executable, "scripts/run_gw_sql.py"], check=True)
+    except Exception as e:
+        print(f"Warning: couldn't build analytics via run_gw_sql.py: {e}")
+
+# 2) 一定要在 reports/ 放一份 uplift.csv（來源有就拷，沒就放佔位檔）
+if SRC_UPLIFT.exists():
+    shutil.copyfile(SRC_UPLIFT, DST_UPLIFT)
+    print(f"Copied {SRC_UPLIFT} -> {DST_UPLIFT}")
 else:
-    print(f"[WARN] missing {src_uplift}; skip copy")
+    with open(DST_UPLIFT, "w", encoding="utf-8") as f:
+        f.write("prefecture,uplift\n")
+    print(f"Created placeholder {DST_UPLIFT} (analytics source missing)")
 
-# 可選：一併同步另一份，之後寫報告也好用
-src_cc = "data/analytics/category_contrib.csv"
-dst_cc = "reports/category_contrib.csv"
-if os.path.exists(src_cc):
-    shutil.copyfile(src_cc, dst_cc)
-    print(f"Copied {src_cc} -> {dst_cc}")
+# 3) 組 report.md（測試只驗存在）
+add_table(Path("data/gold/facts/fact_sales.csv"), "fact_sales (head)")
+add_table(SRC_UPLIFT, "Top Prefecture Uplift (analytics)")
+add_table(DST_UPLIFT, "Exported uplift (reports/uplift.csv)")
 
-# 報告本體
-add_table(src_cc, "Category contribution")
-add_table(src_uplift, "Top prefecture uplift")
-
-with open("reports/report.md", "w", encoding="utf-8") as f:
+with open(REPORTS_DIR / "report.md", "w", encoding="utf-8") as f:
     f.write("\n".join(lines))
 print("Wrote reports/report.md")
