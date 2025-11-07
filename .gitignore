@@ -210,3 +210,7 @@ __marimo__/
 /data/gold/dims/dim_product.csv
 /data/gold/facts/fact_sales.csv
 reports/
+# keep dashboard preview images
+!reports/
+!reports/figures/
+!reports/figures/*.png

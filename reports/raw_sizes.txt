@@ -1,3 +1,0 @@
-data/raw_official/holidays/_staging/syukujitsu-2.csv	20K
-data/raw_official/jis/_staging/000925835.xlsx	104K
-data/raw_official/tax/_staging/tax_rate_history.csv	609
