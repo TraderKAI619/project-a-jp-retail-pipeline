@@ -1,6 +1,16 @@
 # Project A — Japan Retail Data Pipeline (MVP)
 
-![Dashboard Preview](reports/figures/dashboard_preview.png)
+## 📊 Golden Week 分析結果（GW Analysis Dashboard）
+
+### 🗾 1️⃣ 地域別上振れ率（都道府県別）
+![Uplift Chart](reports/figures/top_prefecture_uplift.png)
+
+### 🛍️ 2️⃣ 商品カテゴリ別貢献度
+![Category Chart](reports/figures/category_contrib_v2.png)
+
+### 📈 3️⃣ 地域別前年比較
+![Region YoY Chart](reports/figures/region_comparison_v2.png)
+
 
 [![CI](https://github.com/TraderKAI619/project-a-jp-retail-pipeline/actions/workflows/ci.yml/badge.svg)](https://github.com/TraderKAI619/project-a-jp-retail-pipeline/actions/workflows/ci.yml)
 [![Nightly ETL](https://github.com/TraderKAI619/project-a-jp-retail-pipeline/actions/workflows/nightly.yml/badge.svg)](https://github.com/TraderKAI619/project-a-jp-retail-pipeline/actions/workflows/nightly.yml)
