@@ -1,6 +1,6 @@
 # Project A — Japan Retail Data Pipeline (MVP)
 
-![Dashboard Preview](reports/figures/dashboard_preview.png)
+![GW Dashboard Preview](reports/figures/dashboard_preview_v2.png)
 
 [![CI](https://github.com/TraderKAI619/project-a-jp-retail-pipeline/actions/workflows/ci.yml/badge.svg)](https://github.com/TraderKAI619/project-a-jp-retail-pipeline/actions/workflows/ci.yml)
 [![Nightly ETL](https://github.com/TraderKAI619/project-a-jp-retail-pipeline/actions/workflows/nightly.yml/badge.svg)](https://github.com/TraderKAI619/project-a-jp-retail-pipeline/actions/workflows/nightly.yml)
