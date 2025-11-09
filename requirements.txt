@@ -5,4 +5,4 @@ plotly
 streamlit
 matplotlib
 pytest>=7.0.0
-pytest-cov>=4.0.0# rebuild Sun Nov  9 07:33:37 UTC 2025
+pytest-cov>=4.0.0  # rebuild Sun Nov 9 07:33:37 UTC 2025
