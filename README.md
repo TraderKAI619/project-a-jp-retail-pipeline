@@ -22,6 +22,8 @@
 面接・実務双方で「データを価値に変える」力を示すポートフォリオとして設計されています。
 
 ---
+▶️ [Launch Dashboard on Streamlit] [ https://project-a-gw.streamlit.app/ ]
+
 ## 📊 Golden Week 分析結果（GW Analysis Dashboard）
 
 ### 🗾 1️⃣ 地域別上振れ率（都道府県別）
