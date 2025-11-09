@@ -214,10 +214,12 @@ reports/
 !reports/
 !reports/figures/
 !reports/figures/*.png
-# ignore all under reports, except figures/*.png
-reports/*
+# ignore everything under reports
+reports/**
+
+# keep markdowns, csvs, and figures images
+!reports/*.md
+!reports/*.csv
+!reports/*.txt
 !reports/figures/
 !reports/figures/*.png
-.streamlit.pid
-.streamlit.log
-.streamlit/
