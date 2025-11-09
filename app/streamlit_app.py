@@ -1,10 +1,29 @@
+import matplotlib
+matplotlib.use('Agg')  # 先設定 backend
+
 import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
+import matplotlib.font_manager as fm
 
-import matplotlib
-matplotlib.rcParams['font.sans-serif'] = ['DejaVu Sans', 'Arial Unicode MS', 'sans-serif']
-matplotlib.rcParams['axes.unicode_minus'] = False
+# === 強制重新載入字體快取 ===
+import os
+import shutil
+
+# 清除 matplotlib 字體快取
+cache_dir = os.path.join(os.path.expanduser("~"), ".cache", "matplotlib")
+if os.path.exists(cache_dir):
+    shutil.rmtree(cache_dir)
+
+# 重新建立字體管理器
+fm._load_fontmanager(try_read_cache=False)
+
+# 設定日文字體
+plt.rcParams['font.family'] = ['IPAGothic', 'IPAMincho', 'sans-serif']
+plt.rcParams['axes.unicode_minus'] = False
+
+# 印出可用字體(除錯用)
+# st.write("Available fonts:", [f.name for f in fm.fontManager.ttflist if 'IPA' in f.name])
 
 # === Page setup ===
 st.set_page_config(page_title="Golden Week Retail Demand Dashboard", layout="wide")
