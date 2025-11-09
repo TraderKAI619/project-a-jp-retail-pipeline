@@ -1,8 +1,5 @@
-duckdb>=1.0.0
-pandas
-pyarrow
-plotly
 streamlit
+pandas
 matplotlib
-pytest>=7.0.0
-pytest-cov>=4.0.0  # rebuild Sun Nov 9 07:33:37 UTC 2025
+pytest
+pytest-cov>=4.0.0
