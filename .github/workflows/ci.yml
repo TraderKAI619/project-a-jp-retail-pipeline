@@ -27,7 +27,6 @@ jobs:
           cache: 'pip'
           cache-dependency-path: 'requirements.txt'
 
-      
       - name: Install Japanese fonts for matplotlib
         run: |
           sudo apt-get update
@@ -38,13 +37,15 @@ jobs:
           python -V
           pip install --upgrade pip
           pip install -r requirements.txt
+          pip install duckdb || true
+          python -m pip show duckdb || echo "⚠️ duckdb not found"
 
-      
-      - name: Sanity import check (skip Streamlit)
+      - name: Sanity import check
         run: |
           python - <<'EOF'
-          import matplotlib, pandas, duckdb
-          print("✅ Core imports OK")
+          import pandas, matplotlib
+          import duckdb
+          print("✅ Core imports OK (pandas, matplotlib, duckdb)")
           EOF
 
       - name: Build all layers + validations
