@@ -1,0 +1,34 @@
+# metrics.yaml (Reference Data / Dimension-focused)
+metrics:
+  # --- 新鮮度 ---
+  - name: data_freshness_hours
+    description: Hours since last successful update across all reference tables
+    threshold: "<= 24"
+
+  # --- 覆蓋率 / 完整性 ---
+  - name: prefecture_coverage_pct
+    description: Distinct prefectures present / 47
+    threshold: ">= 100%"
+
+  - name: municipality_join_consistency_pct
+    description: Share of municipalities whose pref_code exists in prefecture table
+    threshold: ">= 99.0%"
+
+  # --- 唯一性 / 品質 ---
+  - name: duplicate_pref_code_rate
+    description: Duplicate ratio of prefecture codes
+    threshold: "< 0.5%"
+
+  - name: duplicate_muni_code_rate
+    description: Duplicate ratio of municipality codes
+    threshold: "< 0.5%"
+
+  - name: critical_null_rate
+    description: Null ratio in critical columns (codes, names, effective dates)
+    threshold: "< 0.5%"
+
+  # --- 日曆 / 稅率 檢查 ---
+  - name: holidays_next30_count
+    description: Count of holidays in the next 30 days (sanity check)
+  - name: active_tax_rate_bands
+    description: Distinct tax rates active today (sanity check)
